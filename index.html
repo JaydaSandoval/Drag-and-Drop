@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Drag and Drop</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h2>Drag and Drop</h2>
+    <div id="box" draggable="true">Drag Me</div>
+    <div id="dropZone">Drop Here</div>
+    <!--Target ara where hte box can be dropped-->
+    <script>
+        const box = document.getElementById('box');
+        //Finds the draggable box and stores it in a variable
+
+        const dropZone = document.getElementById('dropZone');
+        //Finds the drop and stores it in a variable
+
+        box.addEventListener("dragstart", function(event){
+            //Runs when dragging begins
+            event.dataTransfer.setData("text", event.target.id);
+            //saves the id of the dragged element
+            //Text is the data type label
+            //Event.target.id is "box"
+        });
+
+        dropZone.addEventListener("dragover", function(event){
+            //Runs repeatedly while the dragged item is over the drop zone
+            event.preventDefault();
+            //Prevents the broswers default blocking behavior
+            //Thisis require to allow dropping here
+        });
+
+        dropZone.addEventListener("dragenter", function(event){
+            //Runs when the dragged item first enters the dropZone
+            event.preventDefault();
+            //This helps keep the area as valid drop target
+            dropZone.classList.add('hovered');
+            //Adds a CSS Class so the drop zone changes colors
+        });
+
+
+        dropZone.addEventListener("dragleave", function(event){
+            //Runs when the drag item leaves the drop zone
+            dropZone.classList.add('hovered');
+            //Removes the highlighted color
+        });
+
+        dropZone.addEventListener("drop", function(event){
+            //Runs when the dragged is dropped into the drop zone
+            event.preventDefault();
+            //Stops the defaulty behavior during drop
+
+            const id = event.dataTransfer.getData("text");
+            //Gets back saved id from dragstart
+
+            const draggedElement = document.getElementById(id);
+            //Uses that id to find the real dragged elememt
+            dropZone.textContent = "";
+            //Removes the words "drop here"
+            dropZone.classList.remove('hovered');
+
+            draggedElement.style.margin = '0';
+            //Removes the old auto margin to the box fits nearly inside the zone
+
+            dropZone.appendChild(draggedElement);
+            //Moves the dragged box into the drop zone
+        });
+    </script>
+</body>
+</html>
